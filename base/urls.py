@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import home , room , createRoom , updateroom , deleteroom
+from .views import home , room , createRoom , updateroom , deleteroom , loginPage , logoutUser , RegisterPage
+from django.contrib.auth import logout
 
 urlpatterns = [
+    path('login/' , loginPage , name='login'),
+    path('logout/' , logoutUser , name='logout'),
+    path('register/' , RegisterPage , name='register'),
     path('' , home , name='home'),
     path('room/<str:pk>' , room , name='room'),
     path('create-room/' , createRoom , name='create-room'),

@@ -7,6 +7,17 @@
         <header>
             <nav>
                 <h1>nav bar</h1>
+                {% if request.user.is_authenticated %}
+                    {{ request.user }}
+                {% endif %}
+                <form action="{% url 'home' %}"  method="GET">
+                    <input type="text" name="q" placeholder="Search for a room ..."/>
+                </form>
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                {% endif %}
                 <hr/>
             </nav>
         </header>
