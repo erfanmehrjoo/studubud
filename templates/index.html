@@ -8,7 +8,7 @@
             <nav>
                 <h1>nav bar</h1>
                 {% if request.user.is_authenticated %}
-                    {{ request.user }}
+                    Hello {{ request.user }}
                 {% endif %}
                 <form action="{% url 'home' %}"  method="GET">
                     <input type="text" name="q" placeholder="Search for a room ..."/>

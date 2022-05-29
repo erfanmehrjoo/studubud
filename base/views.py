@@ -8,8 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from .models import Room , Topic
-from .forms import RoomForm
+from .models import Room , Topic , Message
+from .forms import RoomForm , MessageForm
 # Create your views here.
 def loginPage(request):
     page = 'login'
@@ -65,7 +65,17 @@ def home(request , *args , **kwargs):
 
 def room(request ,pk):
     room = Room.objects.get(id=int(pk))
-    return render(request , 'room.html' , context={'room':room})
+    messages = room.message_set.all().order_by("-created")
+    paticipants = room.paticipants.all()
+    if request.method == 'POST':
+        message = Message.objects.create(
+            user = request.user , 
+            room = room ,
+            body = request.POST.get('body')
+        )
+        room.paticipants.add(request.user)
+        return redirect('room' , pk=room.id)
+    return render(request , 'room.html' , context={'room':room , 'messages':messages , 'paticipants':paticipants})
 @login_required(login_url='login')
 def createRoom(request):
     form = RoomForm
@@ -89,6 +99,7 @@ def updateroom(request , pk):
             return redirect('home')
     return render(request , 'room_form.html' , context={'form':form})
 
+@login_required(login_url='login')
 def deleteroom(request ,pk):
     room = Room.objects.get(id=pk)
     if request.user != room.host:
@@ -97,3 +108,26 @@ def deleteroom(request ,pk):
         room.delete()
         return redirect('home')
     return render(request , 'delete.html' , context={})
+
+@login_required(login_url='login')
+def deletemessage(request ,pk):
+    message = Message.objects.get(id=pk)
+    if request.user != message.user:
+        return HttpResponse("<h1>zayeidie<h1>")
+    if request.method == 'POST':
+        message.delete()
+        return redirect('home')
+    return render(request , 'delete.html' , context={'obg':message})
+
+@login_required(login_url='login')
+def updatemessage(request , pk):
+    message = Message.objects.get(id=pk)
+    form = MessageForm(instance=message)
+    if request.user != message.user:
+        return HttpResponse("<h1>Zayeidie<h1/>")
+    if request.method == 'POST':
+        form = MessageForm(request.POST , instance=message)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    return render(request , 'room_form.html' , context={'form':form})
