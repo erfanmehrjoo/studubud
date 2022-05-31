@@ -1,4 +1,3 @@
-import re
 from django.shortcuts import render , redirect
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -60,7 +59,8 @@ def home(request , *args , **kwargs):
     rooms = Room.objects.filter(Q(topic__name__contains=q))
     room_count = rooms.count()
     topics = Topic.objects.all()
-    return render(request , 'home.html' , context = {'rooms':rooms , 'topics':topics , 'room_count':room_count})
+    messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+    return render(request , 'home.html' , context = {'rooms':rooms , 'topics':topics , 'room_count':room_count , 'messages':messages})
 
 
 def room(request ,pk):
@@ -76,6 +76,13 @@ def room(request ,pk):
         room.paticipants.add(request.user)
         return redirect('room' , pk=room.id)
     return render(request , 'room.html' , context={'room':room , 'messages':messages , 'paticipants':paticipants})
+@login_required(login_url='login')
+def UserProfile(request , pk):
+    user = User.objects.get(id=pk)
+    rooms = user.room_set.all()
+    messages = user.message_set.all()
+    topics = Topic.objects.all()
+    return render(request , 'profile.html' , context={'user':user , 'rooms':rooms , 'messages':messages , 'topics':topics})
 @login_required(login_url='login')
 def createRoom(request):
     form = RoomForm

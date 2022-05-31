@@ -1,18 +1,19 @@
 {% extends 'index.html' %}
 {% block content %}
 <style>
-    .home-container{
+    .profile_container{
         display: grid;
         grid-template-columns: 1fr 3fr 1fr;
     }
 </style>
-<div class="home-container">
+<h1>{{ request.user.username }}</h1>
+<div class="profile_container">
     <div>
         {% include 'tepic_compunent.html' %}
     </div>
     <div>
         {% include 'feed_compunent.html' %}
-    </div> 
+    </div>
     <div>
         {% include 'activity_component.html' %}
     </div>
