@@ -1,33 +1,22 @@
-"""studybud URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
 from django.urls import path
-from .views import  home , room , createRoom , updateroom , deleteroom , loginPage , logoutUser , RegisterPage , deletemessage , updatemessage , UserProfile
-from django.contrib.auth import logout
+from . import views
 
 urlpatterns = [
-    path('login/' , loginPage , name='login'),
-    path('logout/' , logoutUser , name='logout'),
-    path('register/' , RegisterPage , name='register'),
-    path('' , home , name='home'),
-    path('room/<str:pk>' , room , name='room'),
-    path('create-room/' , createRoom , name='create-room'),
-    path('update-room/<str:pk>/' , updateroom , name='update-room'),
-    path('delete-room/<str:pk>/' , deleteroom , name='delete-room'),
-    path("delete-message/<str:pk>/" , deletemessage , name='delete-message' ),
-    path("update-message/<str:pk>/" , updatemessage , name='update-message'),
-    path('profile/<str:pk>/' , UserProfile , name='user-profile')
+    path('login/', views.loginPage, name="login"),
+    path('logout/', views.logoutUser, name="logout"),
+    path('register/', views.registerPage, name="register"),
+
+    path('', views.home, name="home"),
+    path('room/<str:pk>/', views.room, name="room"),
+    path('profile/<str:pk>/', views.userProfile, name="user-profile"),
+
+    path('create-room/', views.createRoom, name="create-room"),
+    path('update-room/<str:pk>/', views.updateRoom, name="update-room"),
+    path('delete-room/<str:pk>/', views.deleteRoom, name="delete-room"),
+    path('delete-message/<str:pk>/', views.deleteMessage, name="delete-message"),
+
+    path('update-user/', views.updateUser, name="update-user"),
+
+    path('topics/', views.topicsPage, name="topics"),
+    path('activity/', views.activityPage, name="activity"),
 ]

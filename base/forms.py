@@ -1,13 +1,22 @@
 from django.forms import ModelForm
-from .models import Room , Message
-### make your form
+from django.contrib.auth.forms import UserCreationForm
+from .models import Room, User
+
+
+class MyUserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['name', 'username', 'email', 'password1', 'password2']
+
+
 class RoomForm(ModelForm):
     class Meta:
         model = Room
         fields = '__all__'
-        exclude = ['host' , 'paticipants']
+        exclude = ['host', 'participants']
 
-class MessageForm(ModelForm):
+
+class UserForm(ModelForm):
     class Meta:
-        model = Message
-        fields = '__all__'
+        model = User
+        fields = ['avatar', 'name', 'username', 'email', 'bio']
