@@ -4,6 +4,7 @@
 # StudyBuddy
 
 
+
 </div>
 
 ### Cloning the repository
